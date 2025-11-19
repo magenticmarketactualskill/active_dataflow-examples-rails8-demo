@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_18_225124) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_19_000001) do
   create_table "product_exports", force: :cascade do |t|
     t.string "category_slug"
     t.datetime "created_at", null: false
@@ -20,6 +20,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_18_225124) do
     t.integer "product_id", null: false
     t.string "sku", null: false
     t.datetime "updated_at", null: false
+    t.index ["exported_at"], name: "index_product_exports_on_exported_at"
     t.index ["product_id"], name: "index_product_exports_on_product_id"
   end
 
@@ -31,6 +32,10 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_18_225124) do
     t.decimal "price", precision: 10, scale: 2, null: false
     t.string "sku", null: false
     t.datetime "updated_at", null: false
+    t.index ["active"], name: "index_products_on_active"
+    t.index ["category", "active"], name: "index_products_on_category_and_active"
     t.index ["sku"], name: "index_products_on_sku", unique: true
   end
+
+  add_foreign_key "product_exports", "products"
 end

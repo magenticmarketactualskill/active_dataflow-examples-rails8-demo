@@ -39,8 +39,7 @@ gem "thruster", require: false
 gem "image_processing", "~> 1.2"
 
 # ActiveDataflow gems (path references to parent repo)
-gem "active_dataflow-runtime-heartbeat", path: "../../../subgems/active_data_flow-runtime-heartbeat"
-gem "active_dataflow-connector-active_record", path: "../../../subgems/active_data_flow-connector-sink-active_record"
+gem "active_dataflow", path: "../../../subgems/active_data_flow-runtime-heartbeat"
 
 gem 'whenever', require: false
 

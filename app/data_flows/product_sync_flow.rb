@@ -32,13 +32,17 @@ class ProductSyncFlow < ActiveDataflow::DataFlow
 
   private
 
+  # Transforms product data for export
+  # Handles edge cases per Requirement 8:
+  # - Null categories (8.2)
+  # - Zero prices (8.3)
   def transform(data)
     {
       product_id: data['id'],
       name: data['name'],
       sku: data['sku'],
-      price_cents: (data['price'].to_f * 100).to_i,
-      category_slug: data['category']&.parameterize,
+      price_cents: (data['price'].to_f * 100).to_i, # Handles zero prices (Req 8.3)
+      category_slug: data['category']&.parameterize || 'uncategorized', # Handles null categories (Req 8.2)
       exported_at: Time.current
     }
   end
