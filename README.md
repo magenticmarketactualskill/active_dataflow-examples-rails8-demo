@@ -1,10 +1,10 @@
-# Rails 8 Demo App - ActiveDataflow Example
+# Rails 8 Demo App - ActiveDataFlow Example
 
-This is a demonstration Rails 8 application showcasing ActiveDataflow functionality. The app demonstrates a product catalog synchronization use case with data transformation.
+This is a demonstration Rails 8 application showcasing ActiveDataFlow functionality. The app demonstrates a product catalog synchronization use case with data transformation.
 
 ## Overview
 
-This demo app illustrates how to integrate ActiveDataflow into a Rails application to:
+This demo app illustrates how to integrate ActiveDataFlow into a Rails application to:
 - Read data from a source table (products)
 - Transform the data (price conversion, slug generation)
 - Write to a destination table (product_exports)
@@ -96,7 +96,7 @@ Visit `http://localhost:3000/product_exports` to see products that have been exp
 
 ### Trigger DataFlow (TODO)
 
-Once ActiveDataflow gems are fully implemented, you can trigger the DataFlow:
+Once ActiveDataFlow gems are fully implemented, you can trigger the DataFlow:
 
 ```bash
 curl -X POST http://localhost:3000/active_data_flow/data_flows/heartbeat
@@ -106,13 +106,13 @@ Or visit the DataFlows dashboard at `http://localhost:3000/active_data_flow/data
 
 ## Development Status
 
-**Note**: This demo app is currently in development. The ActiveDataflow gems are being implemented and some features are temporarily disabled:
+**Note**: This demo app is currently in development. The ActiveDataFlow gems are being implemented and some features are temporarily disabled:
 
-- ActiveDataflow Rails engine mounting (commented out in routes)
+- ActiveDataFlow Rails engine mounting (commented out in routes)
 - DataFlow configuration seeding (commented out in seeds)
-- ActiveDataflow initializer configuration (commented out)
+- ActiveDataFlow initializer configuration (commented out)
 
-These will be enabled once the core ActiveDataflow gems are complete.
+These will be enabled once the core ActiveDataFlow gems are complete.
 
 ## Use Case: Product Catalog Sync
 
@@ -189,10 +189,10 @@ db/
 
 ## Related Documentation
 
-- [ActiveDataflow Parent Repository](../../../)
-- [ActiveDataflow Requirements](../../../.kiro/specs/requirements.md)
-- [ActiveDataflow Design](../../../.kiro/specs/design.md)
+- [ActiveDataFlow Parent Repository](../../../)
+- [ActiveDataFlow Requirements](../../../.kiro/specs/requirements.md)
+- [ActiveDataFlow Design](../../../.kiro/specs/design.md)
 
 ## License
 
-This demo application is part of the ActiveDataflow project.
+This demo application is part of the ActiveDataFlow project.

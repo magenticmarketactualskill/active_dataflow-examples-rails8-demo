@@ -13,7 +13,7 @@
 
 ## DataFlow Components
 
-- **DataFlow**: An ActiveDataflow process that reads, transforms, and writes data
+- **DataFlow**: An ActiveDataFlow process that reads, transforms, and writes data
 - **Product_Sync_Flow**: The specific DataFlow implementation that syncs products to exports
 - **Heartbeat_Endpoint**: An HTTP endpoint that triggers DataFlow execution
 

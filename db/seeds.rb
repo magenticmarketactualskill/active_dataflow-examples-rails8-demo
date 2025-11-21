@@ -34,7 +34,7 @@ end
 puts "Created #{Product.count} products (#{Product.where(active: true).count} active, #{Product.where(active: false).count} inactive)"
 
 # Create DataFlow configuration
-# TODO: Uncomment when ActiveDataflow gems are fully implemented
+# TODO: Uncomment when ActiveDataFlow gems are fully implemented
 # puts "Creating DataFlow configuration..."
 # 
 # ActiveDataFlow::RailsHeartbeatApp::DataFlow.find_or_create_by!(name: "Product Sync Flow") do |df|
@@ -50,5 +50,5 @@ puts "Created #{Product.count} products (#{Product.where(active: true).count} ac
 puts "\nSetup complete! You can now:"
 puts "1. Start the server: rails server"
 puts "2. Visit http://localhost:3000 to see products"
-puts "3. TODO: Trigger DataFlow when ActiveDataflow gems are implemented"
+puts "3. TODO: Trigger DataFlow when ActiveDataFlow gems are implemented"
 puts "4. View exports: http://localhost:3000/product_exports"

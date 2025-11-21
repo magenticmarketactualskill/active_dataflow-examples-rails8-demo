@@ -18,11 +18,12 @@ class DataFlowsController < ApplicationController
   def heartbeat
     begin
       # Execute the ProductSyncFlow
+      Rails.logger.info("/heartbeat called")
       flow = ProductSyncFlow.new
       flow.run
       
       @status = "success"
-      @message = "ProductSyncFlow executed successfully!"
+      @message = "ProductSyncFlow called"
       @export_count = ProductExport.count
       
       respond_to do |format|

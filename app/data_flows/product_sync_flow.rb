@@ -1,26 +1,33 @@
 # frozen_string_literal: true
+require 'active_data_flow'
 
-# ProductSyncFlow demonstrates ActiveDataflow functionality by syncing
+# ProductSyncFlow demonstrates ActiveDataFlow functionality by syncing
 # active products to an export table with data transformation.
 #
 # This DataFlow:
 # - Reads from the products table (filtering active products)
 # - Transforms price to cents and category to slug
 # - Writes to the product_exports table
-class ProductSyncFlow < ActiveDataflow::DataFlow
-  def initialize(config = {})
-    super
-    @source = ActiveDataflow::Connector::Source::ActiveRecord.new(
-      model: Product,
-      scope: ->(relation) { relation.where(active: true) }
+class ProductSyncFlow
+  def initialize
+    @source = ActiveDataFlow::Connector::Source::ActiveRecordSource.new(
+        model_class: Product,
+        scope: ->(relation) { relation.where(active: true) }
     )
-    @sink = ActiveDataflow::Connector::Sink::ActiveRecord.new(
-      model: ProductExport
+    
+    @sink = ActiveDataFlow::Connector::Sink::ActiveRecordSink.new(
+        model_class: ProductExport
+    )
+
+    @flow = ActiveDataFlow::DataFlow.find_or_create(
+      name: "flow_0",
+      source: @source,
+      sink: @sink
     )
   end
 
   def run
-    @source.each do |message|
+    @flow.source.each do |message|
       transformed = transform(message.data)
       @sink.write(transformed)
     end

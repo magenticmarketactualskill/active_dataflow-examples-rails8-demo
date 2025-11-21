@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This document specifies the requirements for a Rails 8 demonstration application that showcases ActiveDataflow functionality. The application implements a product catalog synchronization use case where products from a source table are filtered, transformed, and exported to a destination table. The demo serves as a reference implementation for integrating ActiveDataflow into Rails applications.
+This document specifies the requirements for a Rails 8 demonstration application that showcases ActiveDataFlow functionality. The application implements a product catalog synchronization use case where products from a source table are filtered, transformed, and exported to a destination table. The demo serves as a reference implementation for integrating ActiveDataFlow into Rails applications.
 
 For term definitions, see #[[file:glossary.md]]
 
@@ -10,7 +10,7 @@ For term definitions, see #[[file:glossary.md]]
 
 ### Requirement 1
 
-**User Story:** As a developer, I want to set up the Rails 8 demo application, so that I can explore ActiveDataflow functionality in a working environment
+**User Story:** As a developer, I want to set up the Rails 8 demo application, so that I can explore ActiveDataFlow functionality in a working environment
 
 #### Acceptance Criteria
 

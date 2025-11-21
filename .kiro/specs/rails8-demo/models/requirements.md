@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This document specifies the requirements for the data models in the Rails 8 demo application. The models represent the core data structures for the product catalog synchronization use case, including source products and their exported transformations. These models serve as the foundation for demonstrating ActiveDataflow's data processing capabilities.
+This document specifies the requirements for the data models in the Rails 8 demo application. The models represent the core data structures for the product catalog synchronization use case, including source products and their exported transformations. These models serve as the foundation for demonstrating ActiveDataFlow's data processing capabilities.
 
 For term definitions, see #[[file:../glossary.md]]
 

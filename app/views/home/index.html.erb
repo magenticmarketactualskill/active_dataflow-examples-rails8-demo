@@ -46,7 +46,7 @@
 <div class="container">
   <!-- Header -->
   <div class="header">
-    <h1>ActiveDataflow Demo</h1>
+    <h1>ActiveDataFlow Demo</h1>
     <p>Rails 8 Product Catalog Synchronization Example</p>
   </div>
 
@@ -102,7 +102,7 @@
   <div class="card">
     <h2 style="color: #805ad5;">⚡ ProductSyncFlow DataFlow</h2>
     <p style="font-size: 1.1em;">
-      The ProductSyncFlow demonstrates ActiveDataflow's data transformation capabilities. 
+      The ProductSyncFlow demonstrates ActiveDataFlow's data transformation capabilities. 
       It automatically syncs active products to the export table with the following transformations:
     </p>
 
@@ -148,7 +148,7 @@
 
     <!-- Code Preview -->
     <div class="code-block">
-<pre>class ProductSyncFlow < ActiveDataflow::DataFlow
+<pre>class ProductSyncFlow < ActiveDataFlow::DataFlow
   def initialize(config = {})
     @source = ActiveRecord.new(
       model: Product,
@@ -169,7 +169,7 @@ end</pre>
     </div>
 
     <div class="alert alert-warning">
-      <strong>Development Status:</strong> The ActiveDataflow gems are currently being implemented. 
+      <strong>Development Status:</strong> The ActiveDataFlow gems are currently being implemented. 
       The DataFlow code is ready but temporarily inactive until the core framework is complete.
     </div>
 

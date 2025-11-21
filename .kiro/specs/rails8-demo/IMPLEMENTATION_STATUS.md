@@ -144,8 +144,8 @@ This document tracks the implementation status of the Rails 8 demo application a
 
 ## Pending Implementations
 
-### ActiveDataflow Integration ⏳
-- ⏳ ActiveDataflow gems are in development
+### ActiveDataFlow Integration ⏳
+- ⏳ ActiveDataFlow gems are in development
 - ⏳ ProductSyncFlow will be fully functional once gems are complete
 - ⏳ Heartbeat endpoint ready but waiting for gem integration
 
@@ -194,7 +194,7 @@ This document tracks the implementation status of the Rails 8 demo application a
 
 ## Next Steps
 
-1. Complete ActiveDataflow gem development
+1. Complete ActiveDataFlow gem development
 2. Test ProductSyncFlow execution end-to-end
 3. Implement trigger event generator
 4. Add automated test suite

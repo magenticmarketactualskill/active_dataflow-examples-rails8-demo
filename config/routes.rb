@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  # ActiveDataflow routes (provided by active_dataflow-runtime-heartbeat gem)
+  mount ActiveDataFlow::Engine => "/active_data_flow"
+  # ActiveDataFlow routes (provided by active_dataflow-runtime-heartbeat gem)
   scope "/active_data_flow" do
     namespace :active_data_flow do
       namespace :runtime do

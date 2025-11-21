@@ -27,7 +27,7 @@ gem "solid_queue"
 gem "solid_cable"
 
 # Reduces boot times through caching; required in config/boot.rb
-gem "bootsnap", require: false
+#gem "bootsnap", require: false
 
 # Deploy this application anywhere as a Docker container [https://kamal-deploy.org]
 gem "kamal", require: false
@@ -38,8 +38,16 @@ gem "thruster", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
 
-# ActiveDataflow gems (path references to parent repo)
-gem "active_dataflow", path: "../../../subgems/active_data_flow-runtime-heartbeat"
+# Submoduler parent gem
+#gem 'submoduler-core-submoduler_parent', git: 'https://github.com/magenticmarketactualskill/submoduler-core-submoduler_parent.git'
+
+# ActiveDataFlow gems (path references to parent repo)
+gem "active_data_flow", path: "../../../", require: true
+#gem 'active_data_flow', git: 'https://github.com/magenticmarketactualskill/active_data_flow'
+
+gem "active_data_flow-connector-source-active_record", path: "../../../subgems", require: true
+gem "active_data_flow-connector-sink-active_record", path: "../../../subgems", require: true
+gem "active_data_flow-runtime-heartbeat", path: "../../../subgems", require: true
 
 gem 'whenever', require: false
 
