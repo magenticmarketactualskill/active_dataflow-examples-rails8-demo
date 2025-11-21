@@ -11,23 +11,18 @@ require 'active_data_flow'
 class ProductSyncFlow
   def initialize
     @source = ActiveDataFlow::Connector::Source::ActiveRecordSource.new(
-        model_class: Product,
-        scope: ->(relation) { relation.where(active: true) }
-    )
-    
-    @sink = ActiveDataFlow::Connector::Sink::ActiveRecordSink.new(
-        model_class: ProductExport
+      scope: Product.active,
+      scope_params: [],
+      batch_size: 3
     )
 
-    @flow = ActiveDataFlow::DataFlow.find_or_create(
-      name: "flow_0",
-      source: @source,
-      sink: @sink
+    @sink = ActiveDataFlow::Connector::Sink::ActiveRecordSink.new(
+        model_class: ProductExport
     )
   end
 
   def run
-    @flow.source.each do |message|
+    @source.each do |message|
       transformed = transform(message.data)
       @sink.write(transformed)
     end
