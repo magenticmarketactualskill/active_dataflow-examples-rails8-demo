@@ -8,23 +8,20 @@ require 'active_data_flow'
 # - Reads from the products table (filtering active products)
 # - Transforms price to cents and category to slug
 # - Writes to the product_exports table
-class ProductSyncFlow
-  def initialize
-    @source = ActiveDataFlow::Connector::Source::ActiveRecordSource.new(
-      scope: Product.active,
-      scope_params: [],
-      batch_size: 3
-    )
+class ActiveProductSyncFlow
+  include ActiveDataFlow::ActiveRecord2ActiveRecord
 
-    @sink = ActiveDataFlow::Connector::Sink::ActiveRecordSink.new(
-        model_class: ProductExport
-    )
-  end
+  source Product.where(active: true), batch_size: 100
+  sink ProductExport, batch_size: 100
+  runtime :heartbeat, interval: 3600
 
   def run
-    @source.each do |message|
-      transformed = transform(message)
-      @sink.write(transformed)
+    Rails.logger.info("ActiveProductSyncFlow run")
+    @flow.source.each do |message|
+      Rails.logger.info("message: #{message}")
+      transformed = transform(message.data)
+      Rails.logger.info("transformed: #{transformed}")
+      @flow.sink.write(transformed)
     end
   rescue StandardError => e
     Rails.logger.error("ProductSyncFlow error: #{e.message}")

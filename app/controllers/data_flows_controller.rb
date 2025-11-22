@@ -19,7 +19,11 @@ class DataFlowsController < ApplicationController
     begin
       # Execute the ProductSyncFlow
       Rails.logger.info("/heartbeat called")
-      flow = ProductSyncFlow.new
+
+      # SHOULD query DataFlows table
+      # for each DataFlow object call run
+
+      flow = ActiveProductSyncFlow.new
       flow.run
       
       @status = "success"
