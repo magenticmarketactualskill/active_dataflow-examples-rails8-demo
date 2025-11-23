@@ -25,7 +25,7 @@
     |
     <%= link_to "View DataFlow", data_flow_path %>
     |
-    <%= link_to "Trigger Heartbeat", heartbeat_path, method: :post, data: { turbo_method: :post } %>
+    <%= link_to "Trigger Heartbeat", active_data_flow_runtime_heartbeat_heartbeat_path, method: :post, data: { turbo_method: :post } %>
   </div>
 
   <% if @product_exports.any? %>
@@ -58,7 +58,7 @@
       <h2>No exports yet</h2>
       <p>Trigger the DataFlow to sync products.</p>
       <p style="margin-top: 20px;">
-        <%= link_to "Trigger Heartbeat", heartbeat_path, method: :post, style: "color: #3182ce; font-weight: 600;", data: { turbo_method: :post } %>
+        <%= link_to "Trigger Heartbeat", active_data_flow_runtime_heartbeat_heartbeat_path, method: :post, style: "color: #3182ce; font-weight: 600;", data: { turbo_method: :post } %>
       </p>
     </div>
   <% end %>

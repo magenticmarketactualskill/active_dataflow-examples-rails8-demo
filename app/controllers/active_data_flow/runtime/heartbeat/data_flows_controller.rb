@@ -18,7 +18,7 @@ module ActiveDataFlow
 
           flows.each do |flow|
             Rails.logger.info "[Heartbeat] Executing flow: #{flow.name}"
-            FlowExecutor.execute(flow)
+            ActiveDataFlow::Runtime::Heartbeat::FlowExecutor.execute(flow)
             triggered_count += 1
             Rails.logger.info "[Heartbeat] Successfully executed flow: #{flow.name}"
           rescue => e

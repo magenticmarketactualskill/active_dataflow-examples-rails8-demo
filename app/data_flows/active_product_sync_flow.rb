@@ -17,10 +17,10 @@ class ActiveProductSyncFlow
 
   def run
     Rails.logger.info("ActiveProductSyncFlow run")
-    @flow.source.each do |message|
-      Rails.logger.info("message: #{message}")
-      transformed = transform(message.data)
-      Rails.logger.info("transformed: #{transformed}")
+    @flow.source.each do |product|
+      Rails.logger.info("Processing product: #{product.id}")
+      transformed = transform(product)
+      Rails.logger.info("Transformed: #{transformed}")
       @flow.sink.write(transformed)
     end
   rescue StandardError => e
@@ -35,13 +35,13 @@ class ActiveProductSyncFlow
   # Handles edge cases per Requirement 8:
   # - Null categories (8.2)
   # - Zero prices (8.3)
-  def transform(data)
+  def transform(product)
     {
-      product_id: data['id'],
-      name: data['name'],
-      sku: data['sku'],
-      price_cents: (data['price'].to_f * 100).to_i, # Handles zero prices (Req 8.3)
-      category_slug: data['category']&.parameterize || 'uncategorized', # Handles null categories (Req 8.2)
+      product_id: product.id,
+      name: product.name,
+      sku: product.sku,
+      price_cents: (product.price.to_f * 100).to_i, # Handles zero prices (Req 8.3)
+      category_slug: product.category&.parameterize || 'uncategorized', # Handles null categories (Req 8.2)
       exported_at: Time.current
     }
   end
