@@ -1,12 +1,17 @@
 Rails.application.routes.draw do
   mount ActiveDataFlow::Engine => "/active_data_flow"
-  # ActiveDataFlow routes (provided by active_dataflow-runtime-heartbeat gem)
-  scope "/active_data_flow" do
-    namespace :active_data_flow do
-      namespace :runtime do
-        namespace :heartbeat do
-          post "/data_flows/heartbeat", to: "data_flows#heartbeat", as: :heartbeat
-        end
+  
+  # ActiveDataFlow CRUD routes
+  namespace :active_data_flow do
+    resources :data_flows do
+      member do
+        patch :toggle_status
+      end
+    end
+    
+    namespace :runtime do
+      namespace :heartbeat do
+        post "/data_flows/heartbeat", to: "data_flows#heartbeat", as: :heartbeat
       end
     end
   end
@@ -24,7 +29,9 @@ Rails.application.routes.draw do
   # Application routes
   root "home#index"
   resources :products
-  resources :product_exports, only: [:index]
+  resources :product_exports, only: [:index] do
+    delete :purge, on: :collection
+  end
   
   # DataFlow routes
   get "data_flow", to: "data_flows#show", as: :data_flow

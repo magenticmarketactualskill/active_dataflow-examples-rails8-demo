@@ -1,0 +1,63 @@
+<div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+  <h1>Data Flow: <%= @data_flow.name %></h1>
+
+  <div style="margin-bottom: 20px;">
+    <%= link_to "← Back to Data Flows", active_data_flow_data_flows_path %>
+  </div>
+
+  <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+    <div style="margin-bottom: 15px;">
+      <strong>Name:</strong> <%= @data_flow.name %>
+    </div>
+    
+    <div style="margin-bottom: 15px;">
+      <strong>Status:</strong>
+      <span style="padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; <%= @data_flow.status == 'active' ? 'background-color: #d1fae5; color: #065f46;' : 'background-color: #fee2e2; color: #991b1b;' %>">
+        <%= @data_flow.status.upcase %>
+      </span>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <strong>Last Run:</strong> <%= @data_flow.last_run_at ? @data_flow.last_run_at.strftime('%Y-%m-%d %H:%M:%S UTC') : 'Never' %>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <strong>Last Error:</strong> <%= @data_flow.last_error || 'None' %>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <strong>Created:</strong> <%= @data_flow.created_at.strftime('%Y-%m-%d %H:%M:%S UTC') %>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <strong>Updated:</strong> <%= @data_flow.updated_at.strftime('%Y-%m-%d %H:%M:%S UTC') %>
+    </div>
+  </div>
+
+  <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+    <h3>Source Configuration</h3>
+    <pre style="background-color: #1f2937; color: #f9fafb; padding: 15px; border-radius: 4px; overflow-x: auto;"><%= JSON.pretty_generate(@data_flow.source) %></pre>
+  </div>
+
+  <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+    <h3>Sink Configuration</h3>
+    <pre style="background-color: #1f2937; color: #f9fafb; padding: 15px; border-radius: 4px; overflow-x: auto;"><%= JSON.pretty_generate(@data_flow.sink) %></pre>
+  </div>
+
+  <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+    <h3>Runtime Configuration</h3>
+    <pre style="background-color: #1f2937; color: #f9fafb; padding: 15px; border-radius: 4px; overflow-x: auto;"><%= JSON.pretty_generate(@data_flow.runtime) %></pre>
+  </div>
+
+  <div style="margin-top: 30px;">
+    <%= link_to "Edit", [:edit, :active_data_flow, @data_flow], style: "color: #3182ce; margin-right: 15px;" %>
+    <%= button_to @data_flow.status == 'active' ? 'Disable' : 'Enable', 
+                  toggle_status_active_data_flow_data_flow_path(@data_flow), 
+                  method: :patch,
+                  style: "display: inline; color: #f59e0b; font-weight: 600; margin-right: 15px;" %>
+    <%= button_to "Delete", [:active_data_flow, @data_flow], 
+                  method: :delete, 
+                  data: { turbo_confirm: "Are you sure?" },
+                  style: "display: inline; color: #dc2626; font-weight: 600;" %>
+  </div>
+</div>

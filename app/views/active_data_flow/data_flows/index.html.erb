@@ -1,0 +1,65 @@
+<div style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+  <h1>Data Flows</h1>
+
+  <div style="margin-bottom: 20px;">
+    <%= link_to "← Back to Home", root_path %>
+  </div>
+
+  <table style="width: 100%; border-collapse: collapse;">
+    <thead>
+      <tr style="background-color: #f3f4f6; border-bottom: 2px solid #e5e7eb;">
+        <th style="padding: 12px; text-align: left;">Name</th>
+        <th style="padding: 12px; text-align: left;">Status</th>
+        <th style="padding: 12px; text-align: left;">Last Run</th>
+        <th style="padding: 12px; text-align: left;">Interval</th>
+        <th style="padding: 12px; text-align: left;">Next Run</th>
+        <th style="padding: 12px; text-align: left;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @data_flows.each do |data_flow| %>
+        <tr style="border-bottom: 1px solid #e5e7eb;">
+          <td style="padding: 12px;">
+            <%= link_to data_flow.name, [:active_data_flow, data_flow], style: "color: #3182ce; font-weight: 600;" %>
+          </td>
+          <td style="padding: 12px;">
+            <span style="padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; <%= data_flow.status == 'active' ? 'background-color: #d1fae5; color: #065f46;' : 'background-color: #fee2e2; color: #991b1b;' %>">
+              <%= data_flow.status.upcase %>
+            </span>
+          </td>
+          <td style="padding: 12px;">
+            <%= data_flow.last_run_at ? time_ago_in_words(data_flow.last_run_at) + ' ago' : 'Never' %>
+          </td>
+          <td style="padding: 12px;">
+            <%= data_flow.runtime&.dig('interval') || 3600 %> seconds
+          </td>
+          <td style="padding: 12px;">
+            <% if data_flow.last_run_at %>
+              <% interval = data_flow.runtime&.dig('interval') || 3600 %>
+              <% seconds_until = [interval - (Time.current - data_flow.last_run_at).to_i, 0].max %>
+              <%= seconds_until == 0 ? 'Due now' : "In #{seconds_until}s" %>
+            <% else %>
+              Due now
+            <% end %>
+          </td>
+          <td style="padding: 12px;">
+            <%= link_to "View", [:active_data_flow, data_flow], style: "color: #3182ce; margin-right: 10px;" %>
+            <%= link_to "Edit", [:edit, :active_data_flow, data_flow], style: "color: #3182ce; margin-right: 10px;" %>
+            <%= button_to data_flow.status == 'active' ? 'Disable' : 'Enable', 
+                          toggle_status_active_data_flow_data_flow_path(data_flow), 
+                          method: :patch,
+                          style: "display: inline; color: #f59e0b; font-weight: 600; background: none; border: none; cursor: pointer; padding: 0; margin-right: 10px;" %>
+            <%= button_to "Delete", [:active_data_flow, data_flow], 
+                          method: :delete, 
+                          data: { turbo_confirm: "Are you sure?" },
+                          style: "display: inline; color: #dc2626; font-weight: 600; background: none; border: none; cursor: pointer; padding: 0;" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <% if @data_flows.empty? %>
+    <p style="text-align: center; color: #6b7280; margin-top: 40px;">No data flows found.</p>
+  <% end %>
+</div>

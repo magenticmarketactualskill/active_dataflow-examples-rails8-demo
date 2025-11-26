@@ -26,6 +26,8 @@
     <%= link_to "View DataFlow", data_flow_path %>
     |
     <%= link_to "Trigger Heartbeat", active_data_flow_runtime_heartbeat_heartbeat_path, method: :post, data: { turbo_method: :post } %>
+    |
+    <%= button_to "🗑️ Purge All", purge_product_exports_path, method: :delete, data: { turbo_confirm: "Are you sure you want to delete all product exports?" }, style: "display: inline; color: #dc2626; font-weight: 600;" %>
   </div>
 
   <% if @product_exports.any? %>

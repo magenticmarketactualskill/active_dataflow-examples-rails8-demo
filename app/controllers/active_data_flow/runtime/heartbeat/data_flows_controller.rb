@@ -11,6 +11,21 @@ module ActiveDataFlow
         def heartbeat
           Rails.logger.info "[Heartbeat] Starting heartbeat check at #{Time.current}"
           
+          # Log state of all flows
+          all_flows = DataFlow.all
+          Rails.logger.info "[Heartbeat] Total flows: #{all_flows.count}"
+          
+          all_flows.each do |flow|
+            interval = flow.runtime&.dig('interval') || 3600
+            if flow.last_run_at
+              seconds_since_last_run = (Time.current - flow.last_run_at).to_i
+              seconds_until_next = [interval - seconds_since_last_run, 0].max
+              Rails.logger.info "[Heartbeat] Flow: #{flow.name} | Status: #{flow.status} | Interval: #{interval}s | Last run: #{seconds_since_last_run}s ago | Next run in: #{seconds_until_next}s"
+            else
+              Rails.logger.info "[Heartbeat] Flow: #{flow.name} | Status: #{flow.status} | Interval: #{interval}s | Last run: never | Next run: now (due)"
+            end
+          end
+          
           flows = DataFlow.due_to_run.lock("FOR UPDATE SKIP LOCKED")
           Rails.logger.info "[Heartbeat] Found #{flows.count} flow(s) due to run"
           
