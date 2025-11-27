@@ -2,7 +2,9 @@
   <h1>Data Flow: <%= @data_flow.name %></h1>
 
   <div style="margin-bottom: 20px;">
-    <%= link_to "← Back to Data Flows", active_data_flow_data_flows_path %>
+    <%= link_to "← Back to Data Flows", "/active_data_flow/data_flows" %>
+    |
+    <%= link_to "📊 View Runs", "/active_data_flow/data_flows/#{@data_flow.id}/data_flow_runs", style: "color: #3182ce; font-weight: 600;" %>
   </div>
 
   <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
@@ -32,6 +34,15 @@
     <div style="margin-bottom: 15px;">
       <strong>Updated:</strong> <%= @data_flow.updated_at.strftime('%Y-%m-%d %H:%M:%S UTC') %>
     </div>
+
+    <div style="margin-bottom: 15px;">
+      <strong>Total Runs:</strong> <%= @data_flow.data_flow_runs.count %>
+      <span style="margin-left: 10px; color: #059669;">
+        (<%= @data_flow.data_flow_runs.where(status: 'success').count %> success,
+        <%= @data_flow.data_flow_runs.where(status: 'failed').count %> failed,
+        <%= @data_flow.data_flow_runs.where(status: 'pending').count %> pending)
+      </span>
+    </div>
   </div>
 
   <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
@@ -50,12 +61,12 @@
   </div>
 
   <div style="margin-top: 30px;">
-    <%= link_to "Edit", [:edit, :active_data_flow, @data_flow], style: "color: #3182ce; margin-right: 15px;" %>
+    <%= link_to "Edit", "/active_data_flow/data_flows/#{@data_flow.id}/edit", style: "color: #3182ce; margin-right: 15px;" %>
     <%= button_to @data_flow.status == 'active' ? 'Disable' : 'Enable', 
-                  toggle_status_active_data_flow_data_flow_path(@data_flow), 
+                  "/active_data_flow/data_flows/#{@data_flow.id}/toggle_status", 
                   method: :patch,
                   style: "display: inline; color: #f59e0b; font-weight: 600; margin-right: 15px;" %>
-    <%= button_to "Delete", [:active_data_flow, @data_flow], 
+    <%= button_to "Delete", "/active_data_flow/data_flows/#{@data_flow.id}", 
                   method: :delete, 
                   data: { turbo_confirm: "Are you sure?" },
                   style: "display: inline; color: #dc2626; font-weight: 600;" %>

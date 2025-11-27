@@ -2,10 +2,10 @@
   <h1>Edit Data Flow</h1>
 
   <div style="margin-bottom: 20px;">
-    <%= link_to "← Back to Data Flow", [:active_data_flow, @data_flow] %>
+    <%= link_to "← Back to Data Flow", "/active_data_flow/data_flows/#{@data_flow.id}" %>
   </div>
 
-  <%= form_with(model: [:active_data_flow, @data_flow], local: true) do |form| %>
+  <%= form_with(model: @data_flow, url: "/active_data_flow/data_flows/#{@data_flow.id}", method: :patch, local: true) do |form| %>
     <% if @data_flow.errors.any? %>
       <div style="background-color: #fee2e2; border: 1px solid #fca5a5; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
         <h3 style="color: #991b1b; margin-top: 0;">
@@ -31,7 +31,7 @@
 
     <div style="margin-top: 30px;">
       <%= form.submit "Update Data Flow", style: "background-color: #3182ce; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;" %>
-      <%= link_to "Cancel", [:active_data_flow, @data_flow], style: "margin-left: 15px; color: #6b7280;" %>
+      <%= link_to "Cancel", "/active_data_flow/data_flows/#{@data_flow.id}", style: "margin-left: 15px; color: #6b7280;" %>
     </div>
   <% end %>
 </div>

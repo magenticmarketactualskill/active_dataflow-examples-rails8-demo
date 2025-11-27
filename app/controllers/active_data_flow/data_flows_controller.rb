@@ -2,6 +2,7 @@
 
 module ActiveDataFlow
   class DataFlowsController < ApplicationController
+    layout 'application'
     before_action :set_data_flow, only: [:show, :edit, :update, :destroy, :toggle_status]
 
     def index

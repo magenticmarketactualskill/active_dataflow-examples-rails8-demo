@@ -7,6 +7,9 @@ Rails.application.routes.draw do
       member do
         patch :toggle_status
       end
+      resources :data_flow_runs, only: [:index, :show, :create] do
+        delete :purge, on: :collection
+      end
     end
     
     namespace :runtime do

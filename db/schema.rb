@@ -10,7 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_21_191550) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_27_020857) do
+  create_table "active_data_flow_data_flow_runs", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "data_flow_id", null: false
+    t.datetime "ended_at"
+    t.text "error_backtrace"
+    t.text "error_message"
+    t.datetime "run_after", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "started_at"
+    t.string "status", null: false
+    t.datetime "updated_at", null: false
+    t.index ["data_flow_id", "created_at"], name: "index_data_flow_runs_on_data_flow_id_and_created_at"
+    t.index ["data_flow_id"], name: "index_active_data_flow_data_flow_runs_on_data_flow_id"
+    t.index ["run_after"], name: "index_active_data_flow_data_flow_runs_on_run_after"
+    t.index ["status"], name: "index_active_data_flow_data_flow_runs_on_status"
+  end
+
   create_table "active_data_flow_data_flows", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "last_error"
@@ -51,5 +67,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_21_191550) do
     t.index ["sku"], name: "index_products_on_sku", unique: true
   end
 
+  add_foreign_key "active_data_flow_data_flow_runs", "active_data_flow_data_flows", column: "data_flow_id"
   add_foreign_key "product_exports", "products"
 end
