@@ -7,54 +7,7 @@ module ActiveDataFlow
         skip_before_action :verify_authenticity_token
         before_action :authenticate_heartbeat!
         before_action :check_ip_whitelist!
-
-        def heartbeat
-          Rails.logger.info "[Heartbeat] Starting heartbeat check at #{Time.current}"
-          
-          # Log state of all flows
-          all_flows = DataFlow.all
-          Rails.logger.info "[Heartbeat] Total flows: #{all_flows.count}"
-          
-          all_flows.each do |flow|
-            interval = flow.runtime&.dig('interval') || 3600
-            if flow.last_run_at
-              seconds_since_last_run = (Time.current - flow.last_run_at).to_i
-              seconds_until_next = [interval - seconds_since_last_run, 0].max
-              Rails.logger.info "[Heartbeat] Flow: #{flow.name} | Status: #{flow.status} | Interval: #{interval}s | Last run: #{seconds_since_last_run}s ago | Next run in: #{seconds_until_next}s"
-            else
-              Rails.logger.info "[Heartbeat] Flow: #{flow.name} | Status: #{flow.status} | Interval: #{interval}s | Last run: never | Next run: now (due)"
-            end
-          end
-          
-          flows = DataFlow.due_to_run.lock("FOR UPDATE SKIP LOCKED")
-          Rails.logger.info "[Heartbeat] Found #{flows.count} flow(s) due to run"
-          
-          triggered_count = 0
-
-          flows.each do |flow|
-            Rails.logger.info "[Heartbeat] Executing flow: #{flow.name}"
-            ActiveDataFlow::Runtime::Heartbeat::FlowExecutor.execute(flow)
-            triggered_count += 1
-            Rails.logger.info "[Heartbeat] Successfully executed flow: #{flow.name}"
-          rescue => e
-            Rails.logger.error "[Heartbeat] Flow execution failed for #{flow.name}: #{e.message}"
-            Rails.logger.error e.backtrace.first(5).join("\n")
-            # Continue with next flow
-          end
-
-          Rails.logger.info "[Heartbeat] Completed: #{triggered_count}/#{flows.count} flows executed"
-          
-          render json: {
-            flows_due: flows.count,
-            flows_triggered: triggered_count,
-            timestamp: Time.current
-          }
-        rescue => e
-          Rails.logger.error "[Heartbeat] Heartbeat failed: #{e.message}"
-          Rails.logger.error e.backtrace.first(10).join("\n")
-          render json: { error: e.message }, status: :internal_server_error
-        end
-
+        
         private
 
         def authenticate_heartbeat!
