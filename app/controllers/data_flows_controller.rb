@@ -9,13 +9,21 @@ class DataFlowsController < ActiveDataFlow::Runtime::DataFlowsController
   # GET /data_flow
   # Shows ProductSyncFlow details and status
   def show
-    refresh
   end
 
   # Triggers DataFlow execution (as managed by inherited runtime)
-  # POST /heartbeat_event
+  ## POST /heartbeat_click
+  # GET /heartbeat_click
+  def heartbeat_click
+    Rails.logger.info "[DataFlowsController.heartbeat_click] called"
+    heartbeat_event
+  end
+
+  # Triggers DataFlow execution (as managed by inherited runtime)
+  ## POST /heartbeat_event
   # GET /heartbeat_event
   def heartbeat_event
+    super
     Rails.logger.info "[DataFlowsController.heartbeat_event] called"
     super
   end
