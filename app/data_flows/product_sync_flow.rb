@@ -9,6 +9,8 @@ require 'active_data_flow'
 # - Transforms price to cents and category to slug
 # - Writes to the product_exports table
 class ProductSyncFlow
+
+  # Added
   attr_accessor :product_count, export_count, :last_export
   
   def refresh
@@ -17,7 +19,8 @@ class ProductSyncFlow
     @last_export = ProductExport.order(exported_at: :desc).first
   end
 
-  def initialize
+  # Generated
+  def self.register
     @source = ActiveDataFlow::Connector::Source::ActiveRecordSource.new(
       scope: Product.active,
       scope_params: [],
@@ -28,8 +31,14 @@ class ProductSyncFlow
         model_class: ProductExport
     )
     
-    @runtime = ActiveDataFlow::Connector::Sink::ActiveRecordSink.new(
-        model_class: ProductExport
+    @runtime = ActiveDataFlow::Runtime::Heartbeat.new(
+    )
+
+    ActiveDataFlow::DataFlow.find_or_create(
+      name: "product_sync_flow",
+      source: source,
+      sink: sink,
+      runtime: runtime
     )
   end
 
