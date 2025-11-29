@@ -13,4 +13,12 @@ class HomeController < ApplicationController
     @export_count = ProductExport.count
     @last_export = ProductExport.recent_exports.first # Using scope from Requirement 7.1
   end
+
+  # DELETE /reset
+  # Purges all product exports and data flow runs
+  def reset
+    ProductExport.destroy_all
+    ActiveDataFlow::DataFlowRun.destroy_all
+    redirect_to root_path, notice: "Demo reset complete. All exports and data flow runs have been purged."
+  end
 end

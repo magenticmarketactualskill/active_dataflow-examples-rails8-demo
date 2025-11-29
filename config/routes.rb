@@ -28,6 +28,8 @@ Rails.application.routes.draw do
   # Application routes
   root "home#index"
   
+  delete "reset", to: "home#reset", as: :reset
+  
   resources :products
   resources :product_exports, only: [:index] do
     delete :purge, on: :collection

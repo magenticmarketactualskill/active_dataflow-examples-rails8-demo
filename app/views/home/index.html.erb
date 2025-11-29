@@ -185,5 +185,6 @@ end</pre>
     <%= link_to "📄 View Exports", product_exports_path, class: "btn btn-green" %>
     <%= link_to "⚡ View DataFlow", active_data_flow_data_flows_path, class: "btn btn-purple" %>
     <%= button_to "💓 Trigger Heartbeat", heartbeat_click_path, method: :get, class: "btn btn-orange" %>
+    <%= button_to "🔄 Reset Demo", reset_path, method: :delete, data: { turbo_confirm: "This will delete all product exports and data flow runs. Are you sure?" }, class: "btn", style: "background: #dc2626; color: white;" %>
   </div>
 </div>
