@@ -1,1 +1,0 @@
-../../../../../.kiro/steering/hide.md

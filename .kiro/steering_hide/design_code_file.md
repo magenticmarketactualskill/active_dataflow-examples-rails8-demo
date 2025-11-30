@@ -1,1 +1,0 @@
-../../../../../.kiro/steering/design_code_file.md

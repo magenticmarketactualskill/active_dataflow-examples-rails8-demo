@@ -1,1 +1,0 @@
-../../../../../.kiro/../../vendor/submoduler_parent/.kiro/steering/submodules_parent.md
