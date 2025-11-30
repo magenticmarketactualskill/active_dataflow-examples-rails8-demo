@@ -10,21 +10,21 @@ PATH
 PATH
   remote: ../../active_data_flow-connector-sink-active_record
   specs:
-    active_data_flow-connector-sink-active_record (0.1.28)
+    active_data_flow-connector-sink-active_record (0.1.29)
       activerecord (>= 6.0)
       activesupport (>= 6.0)
 
 PATH
   remote: ../../active_data_flow-connector-source-active_record
   specs:
-    active_data_flow-connector-source-active_record (0.1.28)
+    active_data_flow-connector-source-active_record (0.1.29)
       activerecord (>= 6.0)
       activesupport (>= 6.0)
 
 PATH
   remote: ../../active_data_flow-runtime-heartbeat
   specs:
-    active_data_flow-runtime-heartbeat (0.1.28)
+    active_data_flow-runtime-heartbeat (0.1.29)
       rails (>= 6.0)
 
 GEM
@@ -347,6 +347,15 @@ GEM
     stimulus-rails (1.3.4)
       railties (>= 6.0.0)
     stringio (3.1.8)
+    tailwindcss-rails (4.4.0)
+      railties (>= 7.0.0)
+      tailwindcss-ruby (~> 4.0)
+    tailwindcss-ruby (4.1.16)
+    tailwindcss-ruby (4.1.16-aarch64-linux-gnu)
+    tailwindcss-ruby (4.1.16-aarch64-linux-musl)
+    tailwindcss-ruby (4.1.16-arm64-darwin)
+    tailwindcss-ruby (4.1.16-x86_64-linux-gnu)
+    tailwindcss-ruby (4.1.16-x86_64-linux-musl)
     thor (1.4.0)
     thruster (0.1.16)
     thruster (0.1.16-aarch64-linux)
@@ -408,6 +417,7 @@ DEPENDENCIES
   solid_queue
   sqlite3 (>= 2.1)
   stimulus-rails
+  tailwindcss-rails
   thruster
   turbo-rails
   tzinfo-data

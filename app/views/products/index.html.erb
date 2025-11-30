@@ -1,61 +1,44 @@
-<style>
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; background: #f5f7fa; }
-  .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
-  .nav-links { margin-bottom: 20px; }
-  .nav-links a { color: #3182ce; text-decoration: none; margin-right: 15px; }
-  .nav-links a:hover { text-decoration: underline; }
-  h1 { font-size: 2.5em; margin-bottom: 30px; color: #1a202c; }
-  table { width: 100%; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-  thead { background: #f7fafc; }
-  th { padding: 15px; text-align: left; font-weight: 600; color: #4a5568; text-transform: uppercase; font-size: 0.85em; }
-  td { padding: 15px; border-top: 1px solid #e2e8f0; }
-  tr:hover { background: #f7fafc; }
-  .badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; }
-  .badge-active { background: #c6f6d5; color: #22543d; }
-  .badge-inactive { background: #fed7d7; color: #742a2a; }
-</style>
+<div class="mb-6">
+  <%= link_to "← Back to Home", main_app.root_path, class: "text-indigo-600 hover:text-indigo-700 font-medium" %>
+</div>
 
-<div class="container">
-  <div class="nav-links">
-    <%= link_to "← Back to Home", root_path %>
-  </div>
+<h1 class="text-4xl font-bold text-gray-900 mb-8">📦 Products</h1>
 
-  <h1>📦 Products</h1>
-  
-  <div class="nav-links" style="margin-bottom: 30px;">
-    <%= link_to "View Product Exports", product_exports_path %>
-    |
-    <%= link_to "View DataFlow", active_data_flow_data_flows_path %>
-    |
-    <%= link_to "Trigger Heartbeat", heartbeat_click_path %>
-  </div>
+<div class="flex flex-wrap items-center gap-4 mb-8 text-sm">
+  <%= link_to "View Product Exports", main_app.product_exports_path, class: "text-indigo-600 hover:text-indigo-700 font-medium" %>
+  <span class="text-gray-400">|</span>
+  <%= link_to "View DataFlow", main_app.active_data_flow_data_flows_path, class: "text-indigo-600 hover:text-indigo-700 font-medium" %>
+  <span class="text-gray-400">|</span>
+  <%= link_to "Trigger Heartbeat", main_app.heartbeat_click_path, class: "text-indigo-600 hover:text-indigo-700 font-medium" %>
+</div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>SKU</th>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Category</th>
-        <th>Active</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @products.each do |product| %>
+<div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
         <tr>
-          <td><%= product.sku %></td>
-          <td><%= product.name %></td>
-          <td>$<%= number_with_precision(product.price, precision: 2) %></td>
-          <td><%= product.category %></td>
-          <td>
-            <% if product.active %>
-              <span class="badge badge-active">Active</span>
-            <% else %>
-              <span class="badge badge-inactive">Inactive</span>
-            <% end %>
-          </td>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SKU</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Active</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <% @products.each do |product| %>
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= product.sku %></td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= product.name %></td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$<%= number_with_precision(product.price, precision: 2) %></td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><%= product.category %></td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="<%= status_badge_classes(product.active ? 'active' : 'inactive') %>">
+                <%= product.active ? 'Active' : 'Inactive' %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>

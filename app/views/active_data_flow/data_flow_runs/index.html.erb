@@ -1,77 +1,77 @@
-<div style="max-width: 1200px; margin: 0 auto; padding: 20px;">
-  <h1>Data Flow Runs</h1>
+<h1 class="text-4xl font-bold text-gray-900 mb-6">Data Flow Runs</h1>
 
-  <div style="margin-bottom: 20px;">
-    <%= link_to "← Back to Data Flow", "/active_data_flow/data_flows/#{@data_flow_runs.first&.data_flow_id}" %>
-    <% if @data_flow_runs.any? %>
-      |
-      <%= button_to "🗑️ Purge All Runs", "/active_data_flow/data_flows/#{@data_flow_runs.first.data_flow_id}/data_flow_runs/purge", 
-                    method: :delete, 
-                    data: { turbo_confirm: "Are you sure you want to delete all runs for this data flow?" },
-                    style: "display: inline; color: #dc2626; font-weight: 600; background: none; border: none; cursor: pointer; padding: 0;" %>
-    <% end %>
-  </div>
-
-  <table style="width: 100%; border-collapse: collapse;">
-    <thead>
-      <tr style="background-color: #f3f4f6; border-bottom: 2px solid #e5e7eb;">
-        <th style="padding: 12px; text-align: left;">ID</th>
-        <th style="padding: 12px; text-align: left;">Data Flow</th>
-        <th style="padding: 12px; text-align: left;">Status</th>
-        <th style="padding: 12px; text-align: left;">Run After</th>
-        <th style="padding: 12px; text-align: left;">Started At</th>
-        <th style="padding: 12px; text-align: left;">Ended At</th>
-        <th style="padding: 12px; text-align: left;">Duration</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @data_flow_runs.each do |run| %>
-        <tr style="border-bottom: 1px solid #e5e7eb;">
-          <td style="padding: 12px;"><%= run.id %></td>
-          <td style="padding: 12px;">
-            <%= link_to run.data_flow.name, "/active_data_flow/data_flows/#{run.data_flow_id}", style: "color: #3182ce;" %>
-          </td>
-          <td style="padding: 12px;">
-            <span style="padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; 
-              <%= case run.status
-                  when 'success' then 'background-color: #d1fae5; color: #065f46;'
-                  when 'failed' then 'background-color: #fee2e2; color: #991b1b;'
-                  when 'in_progress' then 'background-color: #dbeafe; color: #1e40af;'
-                  when 'pending' then 'background-color: #fef3c7; color: #92400e;'
-                  else 'background-color: #f3f4f6; color: #374151;'
-                  end %>">
-              <%= run.status.upcase %>
-            </span>
-          </td>
-          <td style="padding: 12px;">
-            <%= run.run_after.strftime('%Y-%m-%d %H:%M:%S') %>
-            <% if run.run_after > Time.current %>
-              <span style="color: #059669; font-size: 12px;">(in <%= distance_of_time_in_words(Time.current, run.run_after) %>)</span>
-            <% end %>
-          </td>
-          <td style="padding: 12px;"><%= run.started_at ? run.started_at.strftime('%Y-%m-%d %H:%M:%S') : '-' %></td>
-          <td style="padding: 12px;"><%= run.ended_at ? run.ended_at.strftime('%Y-%m-%d %H:%M:%S') : '-' %></td>
-          <td style="padding: 12px;">
-            <% if run.started_at && run.ended_at %>
-              <%= distance_of_time_in_words(run.started_at, run.ended_at) %>
-            <% else %>
-              -
-            <% end %>
-          </td>
-        </tr>
-        <% if run.error_message.present? %>
-          <tr style="background-color: #fef2f2;">
-            <td colspan="7" style="padding: 12px;">
-              <strong style="color: #991b1b;">Error:</strong>
-              <pre style="margin-top: 8px; padding: 8px; background-color: #fee2e2; border-radius: 4px; overflow-x: auto; font-size: 12px;"><%= run.error_message %></pre>
-            </td>
-          </tr>
-        <% end %>
-      <% end %>
-    </tbody>
-  </table>
-
-  <% if @data_flow_runs.empty? %>
-    <p style="text-align: center; color: #6b7280; margin-top: 40px;">No runs found.</p>
+<div class="flex flex-wrap items-center gap-4 mb-8 text-sm">
+  <%= link_to "← Back to Data Flow", "/active_data_flow/data_flows/#{@data_flow_runs.first&.data_flow_id}", class: "text-indigo-600 hover:text-indigo-700 font-medium" %>
+  <% if @data_flow_runs.any? %>
+    <span class="text-gray-400">|</span>
+    <%= button_to "🗑️ Purge All Runs", "/active_data_flow/data_flows/#{@data_flow_runs.first.data_flow_id}/data_flow_runs/purge", 
+                  method: :delete, 
+                  data: { turbo_confirm: "Are you sure you want to delete all runs for this data flow?" },
+                  class: "text-red-600 hover:text-red-700 font-semibold bg-transparent border-0 p-0 cursor-pointer" %>
   <% end %>
 </div>
+
+<% if @data_flow_runs.any? %>
+  <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data Flow</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Run After</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Started At</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ended At</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white">
+          <% @data_flow_runs.each do |run| %>
+            <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= run.id %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">
+                <%= link_to run.data_flow.name, "/active_data_flow/data_flows/#{run.data_flow_id}", class: "text-indigo-600 hover:text-indigo-700 font-medium" %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="<%= status_badge_classes(run.status) %> text-xs">
+                  <%= run.status.upcase %>
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                <%= run.run_after.strftime('%Y-%m-%d %H:%M:%S') %>
+                <% if run.run_after > Time.current %>
+                  <span class="text-green-600 text-xs">(in <%= distance_of_time_in_words(Time.current, run.run_after) %>)</span>
+                <% end %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><%= run.started_at ? run.started_at.strftime('%Y-%m-%d %H:%M:%S') : '-' %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><%= run.ended_at ? run.ended_at.strftime('%Y-%m-%d %H:%M:%S') : '-' %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                <% if run.started_at && run.ended_at %>
+                  <%= distance_of_time_in_words(run.started_at, run.ended_at) %>
+                <% else %>
+                  -
+                <% end %>
+              </td>
+            </tr>
+            <% if run.error_message.present? %>
+              <tr class="bg-red-50">
+                <td colspan="7" class="px-6 py-4">
+                  <div class="text-sm">
+                    <span class="font-medium text-red-800">Error:</span>
+                    <pre class="mt-2 text-xs text-red-700 bg-red-100 p-3 rounded overflow-x-auto font-mono"><%= run.error_message %></pre>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% else %>
+  <div class="bg-white rounded-lg shadow-sm p-12 text-center border border-gray-200">
+    <div class="text-gray-400 text-6xl mb-4">📊</div>
+    <p class="text-xl text-gray-600">No runs found.</p>
+  </div>
+<% end %>

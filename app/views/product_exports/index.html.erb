@@ -1,67 +1,55 @@
-<style>
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; background: #f5f7fa; }
-  .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
-  .nav-links { margin-bottom: 20px; }
-  .nav-links a { color: #3182ce; text-decoration: none; margin-right: 15px; }
-  .nav-links a:hover { text-decoration: underline; }
-  h1 { font-size: 2.5em; margin-bottom: 30px; color: #1a202c; }
-  table { width: 100%; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-  thead { background: #f7fafc; }
-  th { padding: 15px; text-align: left; font-weight: 600; color: #4a5568; text-transform: uppercase; font-size: 0.85em; }
-  td { padding: 15px; border-top: 1px solid #e2e8f0; }
-  tr:hover { background: #f7fafc; }
-  .empty-state { background: white; padding: 40px; text-align: center; color: #718096; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-</style>
-
-<div class="container">
-  <div class="nav-links">
-    <%= link_to "← Back to Home", root_path %>
-  </div>
-
-  <h1>📄 Product Exports</h1>
-  
-  <div class="nav-links" style="margin-bottom: 30px;">
-    <%= link_to "View Products", products_path %>
-    |
-    <%= link_to "View DataFlow", active_data_flow_data_flows_path %>
-    |
-    <%= link_to "Trigger Heartbeat", heartbeat_click_path %>
-    |
-    <%= button_to "🗑️ Purge All", purge_product_exports_path, method: :delete, data: { turbo_confirm: "Are you sure you want to delete all product exports?" }, style: "display: inline; color: #dc2626; font-weight: 600;" %>
-  </div>
-
-  <% if @product_exports.any? %>
-    <table>
-      <thead>
-        <tr>
-          <th>Product ID</th>
-          <th>SKU</th>
-          <th>Name</th>
-          <th>Price (cents)</th>
-          <th>Category Slug</th>
-          <th>Exported At</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @product_exports.each do |export| %>
-          <tr>
-            <td><%= export.product_id %></td>
-            <td><%= export.sku %></td>
-            <td><%= export.name %></td>
-            <td><%= export.price_cents %></td>
-            <td><%= export.category_slug %></td>
-            <td><%= export.exported_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% else %>
-    <div class="empty-state">
-      <h2>No exports yet</h2>
-      <p>Trigger the DataFlow to sync products.</p>
-      <p style="margin-top: 20px;">
-        <%= link_to "Trigger Heartbeat", heartbeat_click_path, style: "color: #3182ce; font-weight: 600;" %>
-      </p>
-    </div>
-  <% end %>
+<div class="mb-6">
+  <%= link_to "← Back to Home", main_app.root_path, class: "text-indigo-600 hover:text-indigo-700 font-medium" %>
 </div>
+
+<h1 class="text-4xl font-bold text-gray-900 mb-8">📄 Product Exports</h1>
+
+<div class="flex flex-wrap items-center gap-4 mb-8 text-sm">
+  <%= link_to "View Products", main_app.products_path, class: "text-indigo-600 hover:text-indigo-700 font-medium" %>
+  <span class="text-gray-400">|</span>
+  <%= link_to "View DataFlow", main_app.active_data_flow_data_flows_path, class: "text-indigo-600 hover:text-indigo-700 font-medium" %>
+  <span class="text-gray-400">|</span>
+  <%= link_to "Trigger Heartbeat", main_app.heartbeat_click_path, class: "text-indigo-600 hover:text-indigo-700 font-medium" %>
+  <span class="text-gray-400">|</span>
+  <%= button_to "🗑️ Purge All", main_app.purge_product_exports_path, method: :delete, data: { turbo_confirm: "Are you sure you want to delete all product exports?" }, class: "text-red-600 hover:text-red-700 font-semibold bg-transparent border-0 p-0 cursor-pointer" %>
+</div>
+
+<% if @product_exports.any? %>
+  <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product ID</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SKU</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price (cents)</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category Slug</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Exported At</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <% @product_exports.each do |export| %>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= export.product_id %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= export.sku %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= export.name %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= export.price_cents %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><%= export.category_slug %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><%= export.exported_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% else %>
+  <div class="bg-white rounded-lg shadow-sm p-12 text-center border border-gray-200">
+    <div class="text-gray-400 text-6xl mb-4">📦</div>
+    <h2 class="text-2xl font-semibold text-gray-900 mb-2">No exports yet</h2>
+    <p class="text-gray-600 mb-6">
+      Trigger the DataFlow to sync products.
+    </p>
+    <%= link_to "Trigger Heartbeat", main_app.heartbeat_click_path, class: button_classes(:primary) %>
+  </div>
+<% end %>

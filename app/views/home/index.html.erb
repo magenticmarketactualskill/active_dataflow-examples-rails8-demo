@@ -1,154 +1,127 @@
-<style>
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; background: #f5f7fa; }
-  .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
-  .header { text-align: center; margin-bottom: 50px; }
-  .header h1 { font-size: 3em; margin: 0 0 10px 0; color: #1a202c; }
-  .header p { font-size: 1.3em; color: #4a5568; }
-  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 50px; }
-  .stat-card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-center; }
-  .stat-number { font-size: 3em; font-weight: bold; margin-bottom: 10px; }
-  .stat-label { color: #4a5568; font-size: 1.1em; }
-  .stat-detail { color: #718096; font-size: 0.9em; margin-top: 5px; }
-  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px; margin-bottom: 40px; }
-  .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-  .card h2 { font-size: 1.8em; margin: 0 0 15px 0; color: #1a202c; }
-  .card p { color: #4a5568; line-height: 1.6; margin-bottom: 15px; }
-  .card ul { list-style: none; padding: 0; margin: 0 0 20px 0; }
-  .card li { padding: 8px 0; color: #4a5568; }
-  .card li strong { color: #1a202c; }
-  .btn { display: inline-block; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; transition: all 0.2s; border: none; cursor: pointer; font-size: 1em; }
-  .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-  .btn-blue { background: #3182ce; color: white; }
-  .btn-blue:hover { background: #2c5aa0; }
-  .btn-green { background: #38a169; color: white; }
-  .btn-green:hover { background: #2f855a; }
-  .btn-purple { background: #805ad5; color: white; }
-  .btn-purple:hover { background: #6b46c1; }
-  .btn-orange { background: #dd6b20; color: white; }
-  .btn-orange:hover { background: #c05621; }
-  .flow-diagram { background: #f7fafc; padding: 30px; border-radius: 8px; margin: 20px 0; display: flex; align-items: center; justify-content: space-around; flex-wrap: wrap; }
-  .flow-box { background: white; padding: 20px; border-radius: 6px; text-align: center; min-width: 150px; margin: 10px; }
-  .flow-arrow { font-size: 2em; color: #a0aec0; margin: 0 10px; }
-  .transform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0; }
-  .transform-item { border-left: 4px solid #805ad5; padding-left: 15px; }
-  .code-block { background: #1a202c; color: #e2e8f0; padding: 20px; border-radius: 6px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.9em; line-height: 1.5; }
-  .alert { padding: 20px; border-radius: 6px; margin: 20px 0; border-left: 4px solid; }
-  .alert-warning { background: #fef5e7; border-color: #f39c12; color: #7d6608; }
-  .actions { text-align: center; margin-top: 40px; }
-  .actions .btn { margin: 10px; }
-  @media (max-width: 768px) {
-    .grid-2 { grid-template-columns: 1fr; }
-    .flow-diagram { flex-direction: column; }
-    .flow-arrow { transform: rotate(90deg); }
-  }
-</style>
+<!-- Header -->
+<div class="text-center mb-12">
+  <h1 class="text-5xl font-bold text-gray-900 mb-3">ActiveDataFlow Demo</h1>
+  <p class="text-xl text-gray-600">Rails 8 Product Catalog Synchronization Example</p>
+</div>
 
-<div class="container">
-  <!-- Header -->
-  <div class="header">
-    <h1>ActiveDataFlow Demo</h1>
-    <p>Rails 8 Product Catalog Synchronization Example</p>
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+  <div class="bg-white rounded-lg shadow-sm p-8 text-center border border-gray-200">
+    <div class="text-5xl font-bold text-blue-600 mb-2"><%= @product_count %></div>
+    <div class="text-gray-600 font-medium text-lg">Total Products</div>
+    <div class="text-sm text-gray-500 mt-1">(<%= @active_product_count %> active)</div>
+  </div>
+  <div class="bg-white rounded-lg shadow-sm p-8 text-center border border-gray-200">
+    <div class="text-5xl font-bold text-green-600 mb-2"><%= @export_count %></div>
+    <div class="text-gray-600 font-medium text-lg">Exported Products</div>
+    <div class="text-sm text-gray-500 mt-1">Transformed records</div>
+  </div>
+  <div class="bg-white rounded-lg shadow-sm p-8 text-center border border-gray-200">
+    <div class="text-5xl font-bold text-purple-600 mb-2">1</div>
+    <div class="text-gray-600 font-medium text-lg">Active DataFlow</div>
+    <div class="text-sm text-gray-500 mt-1">ProductSyncFlow</div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+  <!-- Products Section -->
+  <div class="bg-white rounded-lg shadow-sm p-8 border border-gray-200">
+    <h2 class="text-3xl font-bold text-blue-600 mb-4">📦 Products</h2>
+    <p class="text-gray-600 leading-relaxed mb-4">The source table containing your product catalog. Each product has:</p>
+    <ul class="space-y-2 mb-6">
+      <li class="text-gray-600"><span class="font-semibold text-gray-900">Name & SKU:</span> Product identification</li>
+      <li class="text-gray-600"><span class="font-semibold text-gray-900">Price:</span> Stored as decimal (e.g., $29.99)</li>
+      <li class="text-gray-600"><span class="font-semibold text-gray-900">Category:</span> Product classification</li>
+      <li class="text-gray-600"><span class="font-semibold text-gray-900">Active Flag:</span> Only active products are synced</li>
+    </ul>
+    <%= link_to "View Products →", products_path, class: button_classes(:primary) %>
   </div>
 
-  <!-- Stats Cards -->
-  <div class="stats">
-    <div class="stat-card">
-      <div class="stat-number" style="color: #3182ce;"><%= @product_count %></div>
-      <div class="stat-label">Total Products</div>
-      <div class="stat-detail">(<%= @active_product_count %> active)</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number" style="color: #38a169;"><%= @export_count %></div>
-      <div class="stat-label">Exported Products</div>
-      <div class="stat-detail">Transformed records</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number" style="color: #805ad5;">1</div>
-      <div class="stat-label">Active DataFlow</div>
-      <div class="stat-detail">ProductSyncFlow</div>
+  <!-- Product Exports Section -->
+  <div class="bg-white rounded-lg shadow-sm p-8 border border-gray-200">
+    <h2 class="text-3xl font-bold text-green-600 mb-4">📄 Product Exports</h2>
+    <p class="text-gray-600 leading-relaxed mb-4">The destination table with transformed product data for external systems:</p>
+    <ul class="space-y-2 mb-6">
+      <li class="text-gray-600"><span class="font-semibold text-gray-900">Product ID:</span> Reference to source product</li>
+      <li class="text-gray-600"><span class="font-semibold text-gray-900">Price in Cents:</span> Converted from decimal (2999)</li>
+      <li class="text-gray-600"><span class="font-semibold text-gray-900">Category Slug:</span> URL-friendly format</li>
+      <li class="text-gray-600"><span class="font-semibold text-gray-900">Export Timestamp:</span> When sync occurred</li>
+    </ul>
+    <%= link_to "View Exports →", product_exports_path, class: button_classes(:success) %>
+  </div>
+</div>
+
+<!-- DataFlow Section -->
+<div class="bg-white rounded-lg shadow-sm p-8 border border-gray-200 mb-10">
+  <h2 class="text-3xl font-bold text-purple-600 mb-4">⚡ ProductSyncFlow DataFlow</h2>
+  <p class="text-lg text-gray-600 leading-relaxed mb-6">
+    The ProductSyncFlow demonstrates ActiveDataFlow's data transformation capabilities. 
+    It automatically syncs active products to the export table with the following transformations:
+  </p>
+
+  <!-- Flow Diagram -->
+  <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-8 mb-6">
+    <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
+      <!-- Source Box -->
+      <div class="bg-blue-600 text-white rounded-lg p-6 text-center min-w-[200px] shadow-lg">
+        <div class="text-lg font-bold mb-2">Source</div>
+        <div class="text-sm opacity-90">Products Table</div>
+        <div class="text-xs opacity-75 mt-2">Active products only</div>
+      </div>
+      
+      <!-- Arrow -->
+      <div class="text-gray-400 text-3xl transform md:transform-none rotate-90 md:rotate-0">
+        →
+      </div>
+      
+      <!-- Transform Box -->
+      <div class="bg-purple-600 text-white rounded-lg p-6 text-center min-w-[200px] shadow-lg">
+        <div class="text-lg font-bold mb-2">Transform</div>
+        <div class="text-sm opacity-90">Data Processing</div>
+        <div class="text-xs opacity-75 mt-2">Price, category, timestamp</div>
+      </div>
+      
+      <!-- Arrow -->
+      <div class="text-gray-400 text-3xl transform md:transform-none rotate-90 md:rotate-0">
+        →
+      </div>
+      
+      <!-- Sink Box -->
+      <div class="bg-green-600 text-white rounded-lg p-6 text-center min-w-[200px] shadow-lg">
+        <div class="text-lg font-bold mb-2">Sink</div>
+        <div class="text-sm opacity-90">Product Exports</div>
+        <div class="text-xs opacity-75 mt-2">Transformed records</div>
+      </div>
     </div>
   </div>
 
-  <!-- Main Content -->
-  <div class="grid-2">
-    <!-- Products Section -->
-    <div class="card">
-      <h2 style="color: #3182ce;">📦 Products</h2>
-      <p>The source table containing your product catalog. Each product has:</p>
-      <ul>
-        <li><strong>Name & SKU:</strong> Product identification</li>
-        <li><strong>Price:</strong> Stored as decimal (e.g., $29.99)</li>
-        <li><strong>Category:</strong> Product classification</li>
-        <li><strong>Active Flag:</strong> Only active products are synced</li>
-      </ul>
-      <%= link_to "View Products →", products_path, class: "btn btn-blue" %>
+  <!-- Transformations -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+    <div class="border-l-4 border-purple-600 pl-4">
+      <div class="font-bold text-gray-900 mb-1">Price Conversion</div>
+      <div class="text-gray-600 text-sm">$29.99 → 2999 cents</div>
+      <div class="text-gray-500 text-xs mt-1">Multiply by 100 for integer storage</div>
     </div>
-
-    <!-- Product Exports Section -->
-    <div class="card">
-      <h2 style="color: #38a169;">📄 Product Exports</h2>
-      <p>The destination table with transformed product data for external systems:</p>
-      <ul>
-        <li><strong>Product ID:</strong> Reference to source product</li>
-        <li><strong>Price in Cents:</strong> Converted from decimal (2999)</li>
-        <li><strong>Category Slug:</strong> URL-friendly format</li>
-        <li><strong>Export Timestamp:</strong> When sync occurred</li>
-      </ul>
-      <%= link_to "View Exports →", product_exports_path, class: "btn btn-green" %>
+    <div class="border-l-4 border-purple-600 pl-4">
+      <div class="font-bold text-gray-900 mb-1">Category Slugification</div>
+      <div class="text-gray-600 text-sm">"Home & Kitchen" → "home-kitchen"</div>
+      <div class="text-gray-500 text-xs mt-1">URL-friendly format</div>
+    </div>
+    <div class="border-l-4 border-purple-600 pl-4">
+      <div class="font-bold text-gray-900 mb-1">Timestamp Addition</div>
+      <div class="text-gray-600 text-sm">exported_at: <%= Time.current.strftime("%Y-%m-%d %H:%M") %></div>
+      <div class="text-gray-500 text-xs mt-1">Track when sync occurred</div>
     </div>
   </div>
 
-  <!-- DataFlow Section -->
-  <div class="card">
-    <h2 style="color: #805ad5;">⚡ ProductSyncFlow DataFlow</h2>
-    <p style="font-size: 1.1em;">
-      The ProductSyncFlow demonstrates ActiveDataFlow's data transformation capabilities. 
-      It automatically syncs active products to the export table with the following transformations:
-    </p>
-
-    <!-- Flow Diagram -->
-    <div class="flow-diagram">
-      <div class="flow-box" style="background: #3182ce; color: white;">
-        <div style="font-weight: bold; margin-bottom: 5px;">Source</div>
-        <div style="font-size: 0.9em;">Products Table</div>
-        <div style="font-size: 0.8em; margin-top: 5px;">Active products only</div>
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-box" style="background: #805ad5; color: white;">
-        <div style="font-weight: bold; margin-bottom: 5px;">Transform</div>
-        <div style="font-size: 0.9em;">Data Processing</div>
-        <div style="font-size: 0.8em; margin-top: 5px;">Price, category, timestamp</div>
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-box" style="background: #38a169; color: white;">
-        <div style="font-weight: bold; margin-bottom: 5px;">Sink</div>
-        <div style="font-size: 0.9em;">Product Exports</div>
-        <div style="font-size: 0.8em; margin-top: 5px;">Transformed records</div>
-      </div>
+  <!-- Code Preview -->
+  <div class="bg-gray-900 rounded-lg overflow-hidden mb-6">
+    <div class="px-6 py-4 bg-gray-800 border-b border-gray-700">
+      <span class="text-gray-400 text-sm font-mono">ProductSyncFlow</span>
     </div>
-
-    <!-- Transformations -->
-    <div class="transform-grid">
-      <div class="transform-item">
-        <div style="font-weight: bold; margin-bottom: 5px;">Price Conversion</div>
-        <div style="color: #4a5568; font-size: 0.9em;">$29.99 → 2999 cents</div>
-        <div style="color: #718096; font-size: 0.85em; margin-top: 3px;">Multiply by 100 for integer storage</div>
-      </div>
-      <div class="transform-item">
-        <div style="font-weight: bold; margin-bottom: 5px;">Category Slugification</div>
-        <div style="color: #4a5568; font-size: 0.9em;">"Home & Kitchen" → "home-kitchen"</div>
-        <div style="color: #718096; font-size: 0.85em; margin-top: 3px;">URL-friendly format</div>
-      </div>
-      <div class="transform-item">
-        <div style="font-weight: bold; margin-bottom: 5px;">Timestamp Addition</div>
-        <div style="color: #4a5568; font-size: 0.9em;">exported_at: <%= Time.current.strftime("%Y-%m-%d %H:%M") %></div>
-        <div style="color: #718096; font-size: 0.85em; margin-top: 3px;">Track when sync occurred</div>
-      </div>
-    </div>
-
-    <!-- Code Preview -->
-    <div class="code-block">
-<pre>class ProductSyncFlow < ActiveDataFlow::DataFlow
+    <div class="p-6 overflow-x-auto">
+      <pre class="text-sm text-gray-100 font-mono leading-relaxed"><code>class ProductSyncFlow < ActiveDataFlow::DataFlow
   def initialize(config = {})
     @source = ActiveRecord.new(
       model: Product,
@@ -165,26 +138,40 @@
       exported_at: Time.current
     }
   end
-end</pre>
-    </div>
-
-    <div class="alert alert-warning">
-      <strong>Development Status:</strong> The ActiveDataFlow gems are currently being implemented. 
-      The DataFlow code is ready but temporarily inactive until the core framework is complete.
-    </div>
-
-    <div style="margin-top: 20px;">
-      <%= link_to "View Full DataFlow Details →", active_data_flow_data_flows_path, class: "btn btn-purple" %>
+end</code></pre>
     </div>
   </div>
 
-  <!-- Quick Actions -->
-  <div class="actions">
-    <h3 style="margin-bottom: 20px;">Quick Actions</h3>
-    <%= link_to "📦 View Products", products_path, class: "btn btn-blue" %>
-    <%= link_to "📄 View Exports", product_exports_path, class: "btn btn-green" %>
-    <%= link_to "⚡ View DataFlow", active_data_flow_data_flows_path, class: "btn btn-purple" %>
-    <%= button_to "💓 Trigger Heartbeat", heartbeat_click_path, method: :get, class: "btn btn-orange" %>
-    <%= button_to "🔄 Reset Demo", reset_path, method: :delete, data: { turbo_confirm: "This will delete all product exports and data flow runs. Are you sure?" }, class: "btn", style: "background: #dc2626; color: white;" %>
+  <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg mb-6">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+        </svg>
+      </div>
+      <div class="ml-3">
+        <p class="text-sm text-yellow-700">
+          <strong class="font-medium">Development Status:</strong>
+          The ActiveDataFlow gems are currently being implemented. 
+          The DataFlow code is ready but temporarily inactive until the core framework is complete.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <%= link_to "View Full DataFlow Details →", active_data_flow_data_flows_path, class: "#{button_classes(:primary)} bg-purple-600 hover:bg-purple-700 focus:ring-purple-500" %>
+  </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="text-center">
+  <h3 class="text-2xl font-semibold text-gray-900 mb-6">Quick Actions</h3>
+  <div class="flex flex-wrap justify-center gap-3">
+    <%= link_to "📦 View Products", products_path, class: button_classes(:primary) %>
+    <%= link_to "📄 View Exports", product_exports_path, class: button_classes(:success) %>
+    <%= link_to "⚡ View DataFlow", active_data_flow_data_flows_path, class: "#{button_classes(:primary)} bg-purple-600 hover:bg-purple-700 focus:ring-purple-500" %>
+    <%= button_to "💓 Trigger Heartbeat", heartbeat_click_path, method: :get, class: "#{button_classes(:primary)} bg-orange-600 hover:bg-orange-700 focus:ring-orange-500" %>
+    <%= button_to "🔄 Reset Demo", reset_path, method: :delete, data: { turbo_confirm: "This will delete all product exports and data flow runs. Are you sure?" }, class: button_classes(:danger) %>
   </div>
 </div>

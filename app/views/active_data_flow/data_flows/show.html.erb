@@ -1,128 +1,145 @@
-<div style="max-width: 800px; margin: 0 auto; padding: 20px;">
-  <h1>Data Flow: <%= @data_flow.name %></h1>
+<h1 class="text-4xl font-bold text-gray-900 mb-6">Data Flow: <%= @data_flow.name %></h1>
 
-  <div style="margin-bottom: 20px;">
-    <%= link_to "← Back to Data Flows", "/active_data_flow/data_flows" %>
-    |
-    <%= link_to "📊 View Runs", "/active_data_flow/data_flows/#{@data_flow.id}/data_flow_runs", style: "color: #3182ce; font-weight: 600;" %>
-  </div>
+<div class="flex flex-wrap items-center gap-4 mb-8 text-sm">
+  <%= link_to "← Back to Data Flows", "/active_data_flow/data_flows", class: "text-indigo-600 hover:text-indigo-700 font-medium" %>
+  <span class="text-gray-400">|</span>
+  <%= link_to "📊 View Runs", "/active_data_flow/data_flows/#{@data_flow.id}/data_flow_runs", class: "text-indigo-600 hover:text-indigo-700 font-semibold" %>
+</div>
 
-  <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-    <div style="margin-bottom: 15px;">
-      <strong>Name:</strong> <%= @data_flow.name %>
-    </div>
-    
-    <div style="margin-bottom: 15px;">
-      <strong>Status:</strong>
-      <span style="padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; <%= @data_flow.status == 'active' ? 'background-color: #d1fae5; color: #065f46;' : 'background-color: #fee2e2; color: #991b1b;' %>">
-        <%= @data_flow.status.upcase %>
-      </span>
-    </div>
-
-    <div style="margin-bottom: 15px;">
-      <strong>Last Run:</strong> <%= @data_flow.last_run_at ? @data_flow.last_run_at.strftime('%Y-%m-%d %H:%M:%S UTC') : 'Never' %>
-    </div>
-
-    <div style="margin-bottom: 15px;">
-      <strong>Last Error:</strong> <%= @data_flow.last_error || 'None' %>
-    </div>
-
-    <div style="margin-bottom: 15px;">
-      <strong>Created:</strong> <%= @data_flow.created_at.strftime('%Y-%m-%d %H:%M:%S UTC') %>
-    </div>
-
-    <div style="margin-bottom: 15px;">
-      <strong>Updated:</strong> <%= @data_flow.updated_at.strftime('%Y-%m-%d %H:%M:%S UTC') %>
-    </div>
-
-    <div style="margin-bottom: 15px;">
-      <strong>Total Runs:</strong> <%= @data_flow.data_flow_runs.count %>
-      <span style="margin-left: 10px; color: #059669;">
-        (<%= @data_flow.data_flow_runs.where(status: 'success').count %> success,
-        <%= @data_flow.data_flow_runs.where(status: 'failed').count %> failed,
-        <%= @data_flow.data_flow_runs.where(status: 'pending').count %> pending)
-      </span>
-    </div>
+<div class="space-y-6">
+  <!-- Status Card -->
+  <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+    <h2 class="text-2xl font-bold text-gray-900 mb-6">Data Flow Information</h2>
+    <dl class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <dt class="text-sm font-medium text-gray-500">Name</dt>
+        <dd class="mt-1 text-sm text-gray-900"><%= @data_flow.name %></dd>
+      </div>
+      <div>
+        <dt class="text-sm font-medium text-gray-500">Status</dt>
+        <dd class="mt-1">
+          <span class="<%= status_badge_classes(@data_flow.status) %>">
+            <%= @data_flow.status.upcase %>
+          </span>
+        </dd>
+      </div>
+      <div>
+        <dt class="text-sm font-medium text-gray-500">Last Run</dt>
+        <dd class="mt-1 text-sm text-gray-900"><%= @data_flow.last_run_at ? @data_flow.last_run_at.strftime('%Y-%m-%d %H:%M:%S UTC') : 'Never' %></dd>
+      </div>
+      <div>
+        <dt class="text-sm font-medium text-gray-500">Last Error</dt>
+        <dd class="mt-1 text-sm text-gray-900"><%= @data_flow.last_error || 'None' %></dd>
+      </div>
+      <div>
+        <dt class="text-sm font-medium text-gray-500">Created</dt>
+        <dd class="mt-1 text-sm text-gray-900"><%= @data_flow.created_at.strftime('%Y-%m-%d %H:%M:%S UTC') %></dd>
+      </div>
+      <div>
+        <dt class="text-sm font-medium text-gray-500">Updated</dt>
+        <dd class="mt-1 text-sm text-gray-900"><%= @data_flow.updated_at.strftime('%Y-%m-%d %H:%M:%S UTC') %></dd>
+      </div>
+      <div class="md:col-span-2">
+        <dt class="text-sm font-medium text-gray-500">Total Runs</dt>
+        <dd class="mt-1 text-sm text-gray-900">
+          <%= @data_flow.data_flow_runs.count %>
+          <span class="ml-2 text-green-600">
+            (<%= @data_flow.data_flow_runs.where(status: 'success').count %> success,
+            <%= @data_flow.data_flow_runs.where(status: 'failed').count %> failed,
+            <%= @data_flow.data_flow_runs.where(status: 'pending').count %> pending)
+          </span>
+        </dd>
+      </div>
+    </dl>
   </div>
 
   <!-- Recent Runs Section -->
   <% recent_runs = @data_flow.data_flow_runs.order(created_at: :desc).limit(5) %>
   <% if recent_runs.any? %>
-    <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-      <h3 style="margin-top: 0; margin-bottom: 15px;">Recent Runs</h3>
-      <table style="width: 100%; border-collapse: collapse;">
-        <thead>
-          <tr style="background-color: #e5e7eb; border-bottom: 2px solid #d1d5db;">
-            <th style="padding: 8px; text-align: left; font-size: 14px;">ID</th>
-            <th style="padding: 8px; text-align: left; font-size: 14px;">Status</th>
-            <th style="padding: 8px; text-align: left; font-size: 14px;">Run After</th>
-            <th style="padding: 8px; text-align: left; font-size: 14px;">Started</th>
-            <th style="padding: 8px; text-align: left; font-size: 14px;">Duration</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% recent_runs.each do |run| %>
-            <tr style="border-bottom: 1px solid #e5e7eb;">
-              <td style="padding: 8px; font-size: 14px;"><%= run.id %></td>
-              <td style="padding: 8px;">
-                <span style="padding: 3px 6px; border-radius: 4px; font-size: 11px; font-weight: 600; 
-                  <%= case run.status
-                      when 'success' then 'background-color: #d1fae5; color: #065f46;'
-                      when 'failed' then 'background-color: #fee2e2; color: #991b1b;'
-                      when 'in_progress' then 'background-color: #dbeafe; color: #1e40af;'
-                      when 'pending' then 'background-color: #fef3c7; color: #92400e;'
-                      else 'background-color: #f3f4f6; color: #374151;'
-                      end %>">
-                  <%= run.status.upcase %>
-                </span>
-              </td>
-              <td style="padding: 8px; font-size: 14px;">
-                <%= run.run_after.strftime('%m/%d %H:%M') %>
-              </td>
-              <td style="padding: 8px; font-size: 14px;">
-                <%= run.started_at ? run.started_at.strftime('%m/%d %H:%M') : '-' %>
-              </td>
-              <td style="padding: 8px; font-size: 14px;">
-                <% if run.started_at && run.ended_at %>
-                  <%= ((run.ended_at - run.started_at) * 1000).round %>ms
-                <% else %>
-                  -
-                <% end %>
-              </td>
+    <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Runs</h3>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Run After</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Started</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
-      <div style="margin-top: 15px; text-align: right;">
-        <%= link_to "View All Runs →", "/active_data_flow/data_flows/#{@data_flow.id}/data_flow_runs", style: "color: #3182ce; font-weight: 600;" %>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <% recent_runs.each do |run| %>
+              <tr>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900"><%= run.id %></td>
+                <td class="px-4 py-3 whitespace-nowrap">
+                  <span class="<%= status_badge_classes(run.status) %> text-xs">
+                    <%= run.status.upcase %>
+                  </span>
+                </td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                  <%= run.run_after.strftime('%m/%d %H:%M') %>
+                </td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                  <%= run.started_at ? run.started_at.strftime('%m/%d %H:%M') : '-' %>
+                </td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                  <% if run.started_at && run.ended_at %>
+                    <%= ((run.ended_at - run.started_at) * 1000).round %>ms
+                  <% else %>
+                    -
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-4 text-right">
+        <%= link_to "View All Runs →", "/active_data_flow/data_flows/#{@data_flow.id}/data_flow_runs", class: "text-indigo-600 hover:text-indigo-700 font-semibold text-sm" %>
       </div>
     </div>
   <% end %>
 
-  <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-    <h3>Source Configuration</h3>
-    <pre style="background-color: #1f2937; color: #f9fafb; padding: 15px; border-radius: 4px; overflow-x: auto;"><%= JSON.pretty_generate(@data_flow.source) %></pre>
+  <!-- Configuration Cards -->
+  <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">Source Configuration</h3>
+    <div class="bg-gray-900 rounded-lg overflow-hidden">
+      <div class="p-4 overflow-x-auto">
+        <pre class="text-sm text-gray-100 font-mono leading-relaxed"><%= JSON.pretty_generate(@data_flow.source) %></pre>
+      </div>
+    </div>
   </div>
 
-  <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-    <h3>Sink Configuration</h3>
-    <pre style="background-color: #1f2937; color: #f9fafb; padding: 15px; border-radius: 4px; overflow-x: auto;"><%= JSON.pretty_generate(@data_flow.sink) %></pre>
+  <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">Sink Configuration</h3>
+    <div class="bg-gray-900 rounded-lg overflow-hidden">
+      <div class="p-4 overflow-x-auto">
+        <pre class="text-sm text-gray-100 font-mono leading-relaxed"><%= JSON.pretty_generate(@data_flow.sink) %></pre>
+      </div>
+    </div>
   </div>
 
-  <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-    <h3>Runtime Configuration</h3>
-    <pre style="background-color: #1f2937; color: #f9fafb; padding: 15px; border-radius: 4px; overflow-x: auto;"><%= JSON.pretty_generate(@data_flow.runtime) %></pre>
+  <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">Runtime Configuration</h3>
+    <div class="bg-gray-900 rounded-lg overflow-hidden">
+      <div class="p-4 overflow-x-auto">
+        <pre class="text-sm text-gray-100 font-mono leading-relaxed"><%= JSON.pretty_generate(@data_flow.runtime) %></pre>
+      </div>
+    </div>
   </div>
 
-  <div style="margin-top: 30px;">
-    <%= link_to "Edit", "/active_data_flow/data_flows/#{@data_flow.id}/edit", style: "color: #3182ce; margin-right: 15px;" %>
+  <!-- Action Buttons -->
+  <div class="flex flex-wrap gap-3">
+    <%= link_to "Edit", "/active_data_flow/data_flows/#{@data_flow.id}/edit", class: button_classes(:primary) %>
     <%= button_to @data_flow.status == 'active' ? 'Disable' : 'Enable', 
                   "/active_data_flow/data_flows/#{@data_flow.id}/toggle_status", 
                   method: :patch,
-                  style: "display: inline; color: #f59e0b; font-weight: 600; margin-right: 15px;" %>
+                  class: "#{button_classes(:secondary)} bg-yellow-600 hover:bg-yellow-700 text-white focus:ring-yellow-500" %>
     <%= button_to "Delete", "/active_data_flow/data_flows/#{@data_flow.id}", 
                   method: :delete, 
                   data: { turbo_confirm: "Are you sure?" },
-                  style: "display: inline; color: #dc2626; font-weight: 600;" %>
+                  class: button_classes(:danger) %>
   </div>
 </div>
