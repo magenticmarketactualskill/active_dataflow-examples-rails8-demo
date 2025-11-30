@@ -52,8 +52,17 @@ class DataFlowRunsController < ApplicationController
 
   def trigger_active_data_flows
     ActiveDataFlow::DataFlow.where(status: 'active').each do |data_flow|
-      data_flow.schedule_next_run
+      # Schedule a run for NOW if one isn't already pending/due
+      unless data_flow.data_flow_runs.pending.where(run_after: ..Time.current).exists?
+        data_flow.data_flow_runs.create!(
+          run_after: Time.current,
+          status: 'pending'
+        )
+      end
     end
+    
+    # Execute all due runs
+    ActiveDataFlow::Runtime::Heartbeat::ScheduleFlowRuns.create
   end
 end
 end
