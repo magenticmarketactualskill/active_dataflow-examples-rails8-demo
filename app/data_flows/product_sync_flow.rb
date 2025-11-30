@@ -60,4 +60,57 @@ class ProductSyncFlow < ActiveDataFlow::DataFlow
       exported_at: Time.current
     }
   end
+
+  # Customize message ID extraction
+  def get_message_id(message)
+    Rails.logger.info "[DataFlowProductSyncFlow.get_message_id] called"
+    message['id']
+  end
+
+  # Customize trasformed ID extraction
+  def get_transformed_id(transformed)
+    Rails.logger.info "[DataFlowProductSyncFlow.get_transformed_id] called"
+    transformed['id']
+  end
+
+  def has_changes(previously_transformed, transformed)
+      # Check if the data has actually changed
+      transformed.name != previously_transformed[:name] ||
+      transformed.sku != previously_transformed[:sku] ||
+      transformed.price_cents != previously_transformed[:price_cents] ||
+      transformed.category_slug != previously_transformed[:category_slug]
+  end
+
+  def find_previous_transformed(transformed_id:)
+    ProductExport.find_by(product_id: transformed_id)
+  end
+  
+  def if_changed(previously_transformed, transformed)
+    {
+        product_id: transformed[:product_id],
+        existing_export_id: previously_transformed.id,
+        changes: {
+          name: [previously_transformed.name, transformed[:name]],
+          sku: [previously_transformed.sku, transformed[:sku]],
+          price_cents: [previously_transformed.price_cents, transformed[:price_cents]],
+          category_slug: [previously_transformed.category_slug, transformed[:category_slug]]
+        }.select { |_k, v| v[0] != v[1] }
+    }
+  end
+
+  # Detects if the transformed data would collide with an existing export
+  # Returns collision details if found, nil otherwise
+  def transform_collision(transformed:)
+    previously_transformed = find_previous_transformed(transformed_id:  get_transformed_id(transformed))
+    if previously_transformed
+      has_changes = has_changes(previously_transformed, transformed)
+      if has_changes
+        Rails.logger.info "[DataFlowProductSyncFlow.transform_collision] detected changes: #{if_changed(previously_transformed, transformed)}"
+      else
+        Rails.logger.info "[DataFlowProductSyncFlow.transform_collision] detected no changes in: #{transformed}"
+      end 
+    else
+      Rails.logger.info "[DataFlowProductSyncFlow.transform_collision] stored new record: #{transformed}"
+    end
+  end
 end
