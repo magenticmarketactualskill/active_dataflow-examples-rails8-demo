@@ -22,7 +22,7 @@ class ProductSyncFlow < ActiveDataFlow::DataFlow
   # Generated
   def self.register
     source = ActiveDataFlow::Connector::Source::ActiveRecordSource.new(
-      scope: Product.active,
+      scope: Product.active_sorted,
       scope_name: :active,
       scope_params: [],
       batch_size: 3
@@ -30,7 +30,6 @@ class ProductSyncFlow < ActiveDataFlow::DataFlow
 
     sink = ActiveDataFlow::Connector::Sink::ActiveRecordSink.new(
         model_class: ProductExport
-        message_id_calc: lambda { |message| mesaage.id }
     )
     
     runtime = ActiveDataFlow::Runtime::Heartbeat::Base.new(
