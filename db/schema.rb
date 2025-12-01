@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_30_134513) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_01_153118) do
   create_table "active_data_flow_data_flow_runs", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "data_flow_id", null: false
@@ -34,12 +34,14 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_30_134513) do
     t.text "last_error"
     t.datetime "last_run_at", precision: nil
     t.string "name", null: false
+    t.integer "next_source_id"
     t.json "runtime"
     t.json "sink", null: false
     t.json "source", null: false
     t.string "status", default: "inactive"
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_active_data_flow_data_flows_on_name", unique: true
+    t.index ["next_source_id"], name: "index_active_data_flow_data_flows_on_next_source_id"
     t.index ["status"], name: "index_active_data_flow_data_flows_on_status"
   end
 
