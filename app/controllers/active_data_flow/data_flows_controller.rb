@@ -15,12 +15,5 @@ module ActiveDataFlow
             @data_flow.update(status: new_status)
             redirect_to active_data_flow_data_flows_path, notice: "Data flow #{new_status}"
         end
-        
-        def heartbeat
-            ActiveDataFlow::DataFlow.all.each do |data_flow|
-                data_flow.heartbeat_event if data_flow.status == 'active'
-            end
-            redirect_to active_data_flow_data_flows_path, notice: "Heartbeat triggered for all active data flows"
-        end
     end
 end
