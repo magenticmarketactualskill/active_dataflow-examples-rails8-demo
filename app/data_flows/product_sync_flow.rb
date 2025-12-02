@@ -11,23 +11,27 @@ require 'active_data_flow'
 class ProductSyncFlow < ActiveDataFlow::DataFlow
 
   class Source < ActiveDataFlow::Connector::Source::ActiveRecordSource
-    def initialize(scope: nil, scope_name: nil, scope_params: [], batch_size: 100)
+    def initialize(scope: nil, scope_params: [])
       # Use provided values or defaults
       scope ||= Product.active_sorted
-      scope_name ||= 'active_sorted'
       
       super(
         scope: scope,
-        scope_name: scope_name,
-        scope_params: scope_params,
-        batch_size: batch_size
+        scope_params: scope_params
       )
+    end
+    
+    protected
+    
+    # Override to provide the correct scope name for serialization
+    def derive_scope_name
+      'active_sorted'
     end
   end
 
   class Runtime < ActiveDataFlow::Runtime::Base
-    def initialize(batch_size: 3, **options)
-      super(batch_size: batch_size, **options)
+    def initialize(batch_size: 3, interval: 10, **options)
+      super(batch_size: batch_size, interval: interval, **options)
     end
     
     # Transforms product data for export

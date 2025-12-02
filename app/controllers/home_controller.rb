@@ -15,10 +15,14 @@ class HomeController < ApplicationController
   end
 
   # DELETE /reset
-  # Purges all product exports and data flow runs
+  # Purges all product exports and data flow runs, and resets cursors
   def reset
     ProductExport.destroy_all
     ActiveDataFlow::DataFlowRun.destroy_all
-    redirect_to root_path, notice: "Demo reset complete. All exports and data flow runs have been purged."
+    
+    # Reset cursors on all data flows so they start from the beginning
+    ActiveDataFlow::DataFlow.update_all(next_source_id: nil)
+    
+    redirect_to root_path, notice: "Demo reset complete. All exports, runs, and cursors have been reset."
   end
 end
